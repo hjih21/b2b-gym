@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +29,9 @@ public class Membership extends BaseTimeEntity {
     private LocalDate endDate;
 
     private int remainingCount;
+
+    @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MembershipHold> holds = new ArrayList<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -61,4 +66,8 @@ public class Membership extends BaseTimeEntity {
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "payment_id")
 //    private Payment payment;
+
+    public void addHold(LocalDate startDate, LocalDate endDate){
+      holds.add(MembershipHold.createHold(this, startDate, endDate));
+    }
 }
