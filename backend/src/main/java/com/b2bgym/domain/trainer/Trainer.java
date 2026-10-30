@@ -26,7 +26,7 @@ public class Trainer extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String intro;
 
-    public static Trainer create(String email, String password, String name, String phone, String intro) {
+    public static Trainer createTrainer(String email, String password, String name, String phone, String intro) {
         Trainer trainer = new Trainer();
         trainer.email = email;
         trainer.password = password;

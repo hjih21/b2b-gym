@@ -1,6 +1,7 @@
 package com.b2bgym.domain.member;
 
 import com.b2bgym.common.BaseTimeEntity;
+import com.b2bgym.domain.membership.Membership;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +25,8 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true,  nullable = false)
     private String phone;
 
-    public static Member create(String email, String password, String name, String phone) {
+
+    public static Member createMember(String email, String password, String name, String phone) {
         Member member = new Member();
         member.email = email;
         member.password = password;
