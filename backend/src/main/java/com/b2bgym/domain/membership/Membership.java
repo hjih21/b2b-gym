@@ -2,6 +2,7 @@ package com.b2bgym.domain.membership;
 
 import com.b2bgym.common.BaseTimeEntity;
 import com.b2bgym.domain.member.Member;
+import com.b2bgym.domain.payment.Payment;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -45,27 +46,28 @@ public class Membership extends BaseTimeEntity {
     @Version
     private Long version;
 
-//    public static Membership createMembership(Member member, Product product, Payment payment, MembershipType type, LocalDate startDate, LocalDate endDate,  int remainingCount) {
-//        Membership membership = new Membership();
-//        membership.member = member;
-//        membership.product = product;
-//        membership.payment = payment;
-//        membership.type = type;
-//        membership.startDate = startDate;
-//        membership.endDate = endDate;
-//        membership.remainingCount = remainingCount;
-//        membership.status = MembershipStatus.ACTIVE;
-//        return membership;
-//
-//    }
+    public static Membership createMembership(Member member, MembershipProduct product,
+                                              Payment payment, LocalDate startDate) {
+        Membership membership = new Membership();
+        membership.member = member;
+        membership.product = product;
+        membership.payment = payment;
+        membership.type = product.getType();
+        membership.startDate = startDate;
+        membership.endDate = startDate.plusDays(product.getDurationDays());
+        membership.remainingCount = product.getTotalCount();
+        membership.status = MembershipStatus.ACTIVE;
+        return membership;
+
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id",  nullable = false)
     private MembershipProduct product;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "payment_id")
-//    private Payment payment;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id", nullable = false, unique = true)
+    private Payment payment;
 
     public void addHold(LocalDate startDate, LocalDate endDate){
       holds.add(MembershipHold.createHold(this, startDate, endDate));
