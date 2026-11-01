@@ -46,6 +46,14 @@ public class Membership extends BaseTimeEntity {
     @Version
     private Long version;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id",  nullable = false)
+    private MembershipProduct product;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id", nullable = false, unique = true)
+    private Payment payment;
+
     public static Membership createMembership(Member member, MembershipProduct product,
                                               Payment payment, LocalDate startDate) {
         Membership membership = new Membership();
@@ -60,14 +68,6 @@ public class Membership extends BaseTimeEntity {
         return membership;
 
     }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id",  nullable = false)
-    private MembershipProduct product;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_id", nullable = false, unique = true)
-    private Payment payment;
 
     public void addHold(LocalDate startDate, LocalDate endDate){
       holds.add(MembershipHold.createHold(this, startDate, endDate));
