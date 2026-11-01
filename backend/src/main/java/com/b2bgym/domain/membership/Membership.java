@@ -28,7 +28,7 @@ public class Membership extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    private int remainingCount;
+    private Integer remainingCount;
 
     @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MembershipHold> holds = new ArrayList<>();
@@ -59,9 +59,9 @@ public class Membership extends BaseTimeEntity {
 //
 //    }
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "product_id")
-//    private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id",  nullable = false)
+    private MembershipProduct product;
 
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "payment_id")
