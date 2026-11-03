@@ -33,6 +33,7 @@ public class PtReservation extends BaseTimeEntity {
     @Column(nullable = false)
     private PtReservationStatus status;
 
+
     public static PtReservation createPtReservation(PtSlot ptSlot, Member member, Membership membership) {
         PtReservation ptReservation = new PtReservation();
         ptReservation.slot = ptSlot;

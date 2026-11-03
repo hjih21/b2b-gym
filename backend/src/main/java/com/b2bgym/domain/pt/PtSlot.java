@@ -25,6 +25,7 @@ public class PtSlot extends BaseTimeEntity {
 
     @Column(nullable = false)
     private LocalDateTime startAt;
+
     @Column(nullable = false)
     private LocalDateTime endAt;
 
@@ -34,6 +35,7 @@ public class PtSlot extends BaseTimeEntity {
 
     @Version
     private Long version;
+
 
     public static PtSlot createPtSlot(Trainer trainer, LocalDateTime startAt, LocalDateTime endAt) {
         PtSlot slot = new PtSlot();

@@ -24,8 +24,10 @@ public class Membership extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MembershipType type; // GX:기간권, PT:횟수권
+
     @Column(nullable = false)
     private LocalDate startDate;
+
     @Column(nullable = false)
     private LocalDate endDate;
 
@@ -33,7 +35,6 @@ public class Membership extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MembershipHold> holds = new ArrayList<>();
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -53,6 +54,7 @@ public class Membership extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id", nullable = false, unique = true)
     private Payment payment;
+
 
     public static Membership createMembership(Member member, MembershipProduct product,
                                               Payment payment, LocalDate startDate) {

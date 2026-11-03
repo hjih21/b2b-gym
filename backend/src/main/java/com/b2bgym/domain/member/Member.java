@@ -18,10 +18,13 @@ public class Member extends BaseTimeEntity {
 
     @Column(unique = true,  nullable = false)
     private String email;
+
     @Column(nullable = false) // UK 제거 -> 삭제 누군가가 Unique 이용해서 비밀번호 채갈 수 있음
     private String password;
+
     @Column(nullable = false)
     private String name;
+
     @Column(unique = true,  nullable = false)
     private String phone;
 

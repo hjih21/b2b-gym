@@ -36,6 +36,7 @@ public class MembershipProduct extends BaseTimeEntity {
 
     private LocalDate saleEndDate;
 
+
     public static MembershipProduct createMembershipProduct(String name, MembershipType type, int durationDays, Integer totalCount, int price, LocalDate saleEndDate) {
         MembershipProduct product = new MembershipProduct();
         product.name = name;

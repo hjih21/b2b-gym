@@ -23,10 +23,12 @@ public class MembershipHold extends BaseTimeEntity {
 
     @Column(nullable = false)
     private LocalDate startDate;
+
     @Column(nullable = false)
     private LocalDate endDate;
 
-    static MembershipHold createHold(Membership membership, LocalDate startDate, LocalDate endDate) {
+
+    public static MembershipHold createHold(Membership membership, LocalDate startDate, LocalDate endDate) {
         MembershipHold hold = new MembershipHold();
         hold.membership = membership;
         hold.startDate = startDate;

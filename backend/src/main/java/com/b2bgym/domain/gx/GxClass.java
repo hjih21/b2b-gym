@@ -27,6 +27,7 @@ public class GxClass extends BaseTimeEntity {
 
     @Column(nullable = false)
     private LocalDateTime startAt;
+
     @Column(nullable = false)
     private LocalDateTime endAt;
 
@@ -38,6 +39,7 @@ public class GxClass extends BaseTimeEntity {
 
     @Version
     private Long version;
+
 
     public static GxClass createGxClass(Trainer trainer, String title, LocalDateTime startAt, LocalDateTime endAt, int capacity){
         GxClass gxClass = new GxClass();

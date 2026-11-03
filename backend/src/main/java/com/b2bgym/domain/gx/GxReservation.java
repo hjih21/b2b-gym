@@ -32,6 +32,7 @@ public class GxReservation extends BaseTimeEntity {
     @Column(nullable = false)
     private GxReservationStatus status;
 
+
     public static GxReservation createGxReservation(GxClass gxClass, Member member){
         GxReservation gxReservation = new GxReservation();
         gxReservation.gxClass = gxClass;

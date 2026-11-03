@@ -47,6 +47,7 @@ public class Payment extends BaseTimeEntity {
 
     private LocalDateTime approvedAt;
 
+
     // 생성
     public static Payment createPayment(Member member, MembershipProduct product,
                                         String orderId, String idempotencyKey) {
