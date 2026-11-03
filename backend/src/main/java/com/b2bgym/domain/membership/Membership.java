@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class Membership extends BaseTimeEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     private MembershipType type; // GX:기간권, PT:횟수권
 
@@ -41,6 +44,7 @@ public class Membership extends BaseTimeEntity {
     private Member member;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     private MembershipStatus status;
 

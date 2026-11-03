@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 
@@ -20,6 +22,7 @@ public class MembershipProduct extends BaseTimeEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     private MembershipType type;
 

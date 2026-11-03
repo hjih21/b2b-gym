@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Getter
@@ -30,6 +32,7 @@ public class PtReservation extends BaseTimeEntity {
     private Membership membership;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     private PtReservationStatus status;
 
