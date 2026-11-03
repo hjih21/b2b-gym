@@ -28,7 +28,7 @@ public class MembershipHold extends BaseTimeEntity {
     private LocalDate endDate;
 
 
-    public static MembershipHold createHold(Membership membership, LocalDate startDate, LocalDate endDate) {
+    static MembershipHold createHold(Membership membership, LocalDate startDate, LocalDate endDate) {
         MembershipHold hold = new MembershipHold();
         hold.membership = membership;
         hold.startDate = startDate;
