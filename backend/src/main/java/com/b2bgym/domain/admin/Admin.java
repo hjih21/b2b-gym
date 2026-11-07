@@ -24,4 +24,12 @@ public class Admin extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String name;
+
+    public static Admin createAdmin(String email, String password, String name) {
+        Admin admin = new Admin();
+        admin.email = email;
+        admin.password = password;
+        admin.name = name;
+        return admin;
+    }
 }
