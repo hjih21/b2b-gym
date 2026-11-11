@@ -3,6 +3,8 @@ package com.b2bgym.domain.membership;
 import com.b2bgym.common.BaseTimeEntity;
 import com.b2bgym.domain.gym.Gym;
 import com.b2bgym.domain.trainer.Trainer;
+import com.b2bgym.exception.BusinessException;
+import com.b2bgym.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -74,10 +76,10 @@ public class MembershipProduct extends BaseTimeEntity {
 
     private static void validatePt(Trainer trainer, int totalCount) {
         if (trainer == null) {
-            throw new IllegalArgumentException("PT 상품은 트레이너를 지정해야 합니다.");
+            throw new BusinessException(ErrorCode.PT_TRAINER_REQUIRED);
         }
         if (totalCount < 1) {
-            throw new IllegalArgumentException("PT 횟수는 1 이상이어야 합니다.");
+            throw new BusinessException(ErrorCode.INVALID_PRODUCT_COUNT, "PT 횟수는 1 이상이어야 합니다.");
         }
     }
 

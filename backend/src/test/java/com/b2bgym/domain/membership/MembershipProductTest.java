@@ -2,6 +2,8 @@ package com.b2bgym.domain.membership;
 
 import com.b2bgym.domain.gym.Gym;
 import com.b2bgym.domain.trainer.Trainer;
+import com.b2bgym.exception.BusinessException;
+import com.b2bgym.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -45,14 +47,16 @@ class MembershipProductTest {
     @DisplayName("트레이너 없이 PT 상품을 만들면 예외가 난다")
     void ptProductWithoutTrainer() {
         assertThatThrownBy(() -> MembershipProduct.createPtProduct(null, "PT 10회", 60, 10, 600000, null))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PT_TRAINER_REQUIRED);
     }
 
     @Test
     @DisplayName("PT 횟수가 0이면 예외가 난다")
     void ptProductWithZeroCount() {
         assertThatThrownBy(() -> MembershipProduct.createPtProduct(trainer, "PT 0회", 60, 0, 600000, null))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BusinessException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_PRODUCT_COUNT);
     }
 
     @Test

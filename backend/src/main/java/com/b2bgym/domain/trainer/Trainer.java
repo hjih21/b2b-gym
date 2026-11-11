@@ -2,6 +2,8 @@ package com.b2bgym.domain.trainer;
 
 import com.b2bgym.common.BaseTimeEntity;
 import com.b2bgym.domain.gym.Gym;
+import com.b2bgym.exception.BusinessException;
+import com.b2bgym.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -58,7 +60,7 @@ public class Trainer extends BaseTimeEntity {
 
     public void updateProfile(String intro, String specialty, int careerYears) {
         if (careerYears < 0) {
-            throw new IllegalArgumentException("경력 연차는 0 이상이어야 합니다.");
+            throw new BusinessException(ErrorCode.INVALID_INPUT, "경력 연차는 0 이상이어야 합니다.");
         }
         this.intro = intro;
         this.specialty = specialty;
