@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -22,7 +24,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  *  - BusinessException: ErrorCode에 정한 상태 코드 그대로
  *  - 요청 형식 오류(@Valid 실패, JSON 깨짐, 필수 헤더 없음 등): 400 INVALID_INPUT
  *  - 예상 못 한 예외: 500. 원인은 로그에만 남기고 응답에는 노출하지 않음
- *  - Security 필터에서 나는 401/403은 컨트롤러 밖이라 여기로 안 옴 -> 1-13에서 따로 처리
+ *  - Security 필터에서 나는 401/403은 컨트롤러 밖이라 저절로는 여기로 안 옴
+ *    -> JwtAuthenticationEntryPoint·JwtAccessDeniedHandler가 예외를 직접 넘겨줘서 아래 두 핸들러가 응답을 만듦
  *
  * @RestControllerAdvice
  *  - "이 클래스는 모든 컨트롤러의 예외를 대신 처리하는 곳"이라는 표시
@@ -53,6 +56,27 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusiness(BusinessException e) {
         log.info("BusinessException: {} - {}", e.getErrorCode(), e.getMessage());
         return toResponse(e.getErrorCode(), e.getMessage());
+    }
+
+    /**
+     * 인증 실패 -> 401 UNAUTHORIZED (토큰 없음·만료·위조로 보호된 URL에 온 경우)
+     *  - 필터 단계에서 난 예외라 원래는 여기로 오지 않음. JwtAuthenticationEntryPoint가 직접 넘겨줌
+     *  - 로그인 실패(이메일·비밀번호 틀림)는 이쪽이 아니라 서비스가 던지는 BusinessException(LOGIN_FAILED)
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException e) {
+        return toResponse(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.getMessage());
+    }
+
+    /**
+     * 인가 실패 -> 403 ACCESS_DENIED (로그인은 했지만 역할이 안 맞음)
+     *  - URL 규칙에서 거절되면 JwtAccessDeniedHandler가 넘겨줌
+     *  - 나중에 @PreAuthorize(메서드 보안)를 쓰면 컨트롤러 호출 중에 이 예외가 나는데,
+     *    이 핸들러가 없으면 맨 아래 Exception 핸들러가 잡아 500으로 바꿔 버림
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException e) {
+        return toResponse(ErrorCode.ACCESS_DENIED, ErrorCode.ACCESS_DENIED.getMessage());
     }
 
     // @Valid @RequestBody 검증 실패 -> 첫 번째 필드 오류를 "필드: 이유"로
