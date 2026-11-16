@@ -13,3 +13,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+# JWT (1-13)
+#  - secret은 비밀 값이라 application-local.yml에 둠 (커밋 안 함)
+#  - HS256 서명 키라 32바이트(256비트) 이상이어야 함
+jwt:
+  access-token-expiration-seconds: 3600 # access token 만료 = 1시간
