@@ -74,6 +74,34 @@ public class MembershipProduct extends BaseTimeEntity {
         return create(trainer.getGym(), trainer, name, MembershipType.PT_COUNT, durationDays, 1, price, saleEndDate, true);
     }
 
+    /**
+     * 관리자 수정 (2-1b)
+     *  - 바꿀 수 있는 것: 이름·기간·가격·판매 종료일
+     *  - 바꿀 수 없는 것: 종류·트레이너·횟수·체험권 여부 -> 상품의 정체가 바뀌므로 새 상품으로 등록
+     *  - 이미 판 회원권은 영향 없음: 만료일은 구매 시점에 membership.end_date로 계산돼 있고, 결제 금액은 payment에 남음
+     *  - saleEndDate = null 이면 상시 판매
+     */
+    public void update(String name, int durationDays, int price, LocalDate saleEndDate) {
+        this.name = name;
+        this.durationDays = durationDays;
+        this.price = price;
+        this.saleEndDate = saleEndDate;
+    }
+
+    // 판매 중지: 삭제하지 않음 (이미 팔린 회원권이 이 상품을 참조) -> 두 번 불러도 결과가 같음
+    public void deactivate() {
+        this.active = false;
+    }
+
+    /**
+     * 지금 살 수 있는 상품인가 = 판매 중지 안 됨 + 판매 종료일이 안 지남 (종료일 당일까지 판매)
+     *  - 오늘 날짜를 밖에서 받음 -> 테스트에서 날짜를 고정할 수 있음
+     *  - 결제 생성(2-2)에서도 이걸로 다시 확인 -> 422 PRODUCT_NOT_ON_SALE
+     */
+    public boolean isOnSale(LocalDate today) {
+        return active && (saleEndDate == null || !today.isAfter(saleEndDate));
+    }
+
     private static void validatePt(Trainer trainer, int totalCount) {
         if (trainer == null) {
             throw new BusinessException(ErrorCode.PT_TRAINER_REQUIRED);

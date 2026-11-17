@@ -68,4 +68,42 @@ class MembershipProductTest {
         assertThat(product.isTrial()).isTrue();
         assertThat(product.getGym()).isSameAs(gym);
     }
+
+    @Test
+    @DisplayName("판매 종료일 당일까지는 판매 중이고, 다음 날부터는 아니다")
+    void onSaleUntilSaleEndDate() {
+        LocalDate end = LocalDate.of(2026, 12, 31);
+        MembershipProduct product = MembershipProduct.createPeriodProduct(gym, "헬스 1개월", 30, 70000, end);
+
+        assertThat(product.isOnSale(end)).isTrue();
+        assertThat(product.isOnSale(end.plusDays(1))).isFalse();
+    }
+
+    @Test
+    @DisplayName("판매 종료일이 없으면 상시 판매, 판매 중지하면 날짜와 상관없이 판매 안 함")
+    void onSaleWithoutEndDateAndDeactivate() {
+        MembershipProduct product = MembershipProduct.createPeriodProduct(gym, "헬스 1개월", 30, 70000, null);
+        assertThat(product.isOnSale(LocalDate.of(2099, 1, 1))).isTrue();
+
+        product.deactivate();
+
+        assertThat(product.isActive()).isFalse();
+        assertThat(product.isOnSale(LocalDate.of(2026, 1, 1))).isFalse();
+    }
+
+    @Test
+    @DisplayName("수정은 이름·기간·가격·판매 종료일만 바꾸고, 종류·트레이너·횟수는 그대로다")
+    void updateKeepsIdentity() {
+        MembershipProduct product = MembershipProduct.createPtProduct(trainer, "PT 10회", 60, 10, 600000, null);
+
+        product.update("PT 10회 (할인)", 90, 500000, LocalDate.of(2026, 12, 31));
+
+        assertThat(product.getName()).isEqualTo("PT 10회 (할인)");
+        assertThat(product.getDurationDays()).isEqualTo(90);
+        assertThat(product.getPrice()).isEqualTo(500000);
+        assertThat(product.getSaleEndDate()).isEqualTo(LocalDate.of(2026, 12, 31));
+        assertThat(product.getType()).isEqualTo(MembershipType.PT_COUNT);
+        assertThat(product.getTrainer()).isSameAs(trainer);
+        assertThat(product.getTotalCount()).isEqualTo(10);
+    }
 }

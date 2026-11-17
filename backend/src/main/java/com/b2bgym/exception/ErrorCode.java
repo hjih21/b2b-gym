@@ -31,8 +31,10 @@ public enum ErrorCode {
     PHONE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 가입된 전화번호입니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
     GYM_NOT_FOUND(HttpStatus.NOT_FOUND, "헬스장을 찾을 수 없습니다."),
+    TRAINER_NOT_FOUND(HttpStatus.NOT_FOUND, "트레이너를 찾을 수 없습니다."), // 2-1b
 
     // 회원권·상품
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "상품을 찾을 수 없습니다."), // 2-1b
     PRODUCT_NOT_ON_SALE(HttpStatus.UNPROCESSABLE_ENTITY, "판매 중인 상품이 아닙니다."),
     INVALID_PRODUCT_COUNT(HttpStatus.BAD_REQUEST, "상품 횟수가 올바르지 않습니다."),
     PT_TRAINER_REQUIRED(HttpStatus.BAD_REQUEST, "PT 상품은 트레이너를 지정해야 합니다."),

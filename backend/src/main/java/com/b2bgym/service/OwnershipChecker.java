@@ -4,6 +4,7 @@ import com.b2bgym.domain.admin.Admin;
 import com.b2bgym.domain.gx.GxClass;
 import com.b2bgym.domain.membership.MembershipProduct;
 import com.b2bgym.domain.pt.PtSlot;
+import com.b2bgym.domain.trainer.Trainer;
 import com.b2bgym.exception.BusinessException;
 import com.b2bgym.exception.ErrorCode;
 import com.b2bgym.repository.AdminRepository;
@@ -37,6 +38,18 @@ public class OwnershipChecker {
     public void checkAdminManagesProduct(Long adminId, MembershipProduct product) {
         Long adminGymId = getGymIdOfAdmin(adminId);
         if (!adminGymId.equals(product.getGym().getId())) {
+            throw new BusinessException(ErrorCode.FORBIDDEN_GYM);
+        }
+    }
+
+    /**
+     * 관리자는 자기 헬스장 트레이너의 PT 상품만 등록 (2-1b)
+     *  - 상품 팩토리는 "상품 헬스장 = 트레이너 헬스장"만 보장 -> 다른 헬스장 트레이너를 넘기면 그 헬스장 상품이 만들어져 버림
+     *  - 그래서 "요청한 관리자가 그 트레이너의 헬스장 사람인가"는 여기서 따로 검사
+     */
+    public void checkAdminManagesTrainer(Long adminId, Trainer trainer) {
+        Long adminGymId = getGymIdOfAdmin(adminId);
+        if (!adminGymId.equals(trainer.getGym().getId())) {
             throw new BusinessException(ErrorCode.FORBIDDEN_GYM);
         }
     }
