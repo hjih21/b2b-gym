@@ -47,6 +47,7 @@ public enum ErrorCode {
     HOLD_OVERLAPS(HttpStatus.UNPROCESSABLE_ENTITY, "이미 홀딩한 기간과 겹칩니다."),
 
     // 결제
+    PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "결제 정보를 찾을 수 없습니다."), // 2-2
     PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "결제 금액이 주문 금액과 다릅니다."),
     REQUEST_IN_PROGRESS(HttpStatus.CONFLICT, "같은 요청을 처리하고 있습니다."),
     PAYMENT_ALREADY_DONE(HttpStatus.CONFLICT, "이미 승인된 결제입니다."),
